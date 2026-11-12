@@ -4,6 +4,18 @@ Say **"Hey JARVIS"** and ask anything. It answers out loud, can check your
 calendar and email, look things up, make Google Docs and Gmail drafts, and shows
 everything on a dashboard.
 
+## 🚀 Easiest install: let Claude Code do it
+
+1. Install [Claude Code](https://claude.com/claude-code) and sign in, if you haven't already.
+2. Open Claude Code and paste this:
+
+   > Install JARVIS on my computer from https://github.com/jpmillerpresidio-123/jarvis — follow its INSTALL_WITH_CLAUDE.md.
+
+3. Answer its couple of questions (your name, your teams), and click **Allow**
+   when your Mac asks for the microphone.
+
+That's it. When it's done, say **"Hey JARVIS"**.
+
 Built on [jarvis-os](https://github.com/Itsme23476/jarvis-os-public) (MIT), with:
 
 - **Free, unlimited voice.** Kokoro runs on your Mac's GPU, with no account and no credits.
@@ -28,21 +40,21 @@ Nothing else is paid. ElevenLabs is optional.
 For email and calendar, connect Gmail and Google Calendar to your Claude account
 (claude.ai → Settings → Connectors). JARVIS uses whatever you've connected.
 
-## Install
+## Install it yourself (Terminal)
 
 ```bash
-git clone https://github.com/jpmillerpresidio-123/jarvis.git jarvis
-cd jarvis
-./setup.sh
+git clone https://github.com/jpmillerpresidio-123/jarvis.git ~/jarvis
+cd ~/jarvis
+./setup.sh --name "Your first name"
 ```
 
-Then:
+Add `--teams basketball/nba/gs,football/nfl/sf` for your teams (ESPN ids), or
+set them later in `.env`. Then:
 
-1. Open `.env` and set `JARVIS_USER_NAME` to your first name. Optionally set your sports teams.
-2. Open **JARVIS** from your Applications folder (or Spotlight).
-3. Allow the **microphone** when macOS asks.
-4. For the double-tap-⌘ shortcut, allow JARVIS under System Settings → Privacy & Security → **Accessibility**.
-5. Say **"Hey JARVIS"**.
+1. Open **JARVIS** from your Applications folder (or Spotlight).
+2. Allow the **microphone** when macOS asks.
+3. For the double-tap-⌘ shortcut, allow JARVIS under System Settings → Privacy & Security → **Accessibility**.
+4. Say **"Hey JARVIS"**.
 
 The first question downloads the hearing model (about 480 MB), so give it a minute.
 

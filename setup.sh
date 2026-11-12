@@ -1,8 +1,18 @@
 #!/bin/bash
 # One-time setup for JARVIS on an Apple Silicon Mac. Safe to re-run.
 #   ./setup.sh
+#   ./setup.sh --name Sam --teams basketball/nba/gs,football/nfl/sf --voice bm_george
 set -e
 cd "$(dirname "$0")"
+NAME=""; TEAMS=""; VOICE=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --name)  NAME="$2"; shift 2 ;;
+    --teams) TEAMS="$2"; shift 2 ;;
+    --voice) VOICE="$2"; shift 2 ;;
+    *) echo "unknown option: $1"; exit 1 ;;
+  esac
+done
 say_step() { printf "\n\033[1;36m▸ %s\033[0m\n" "$1"; }
 
 [ "$(uname -s)" = Darwin ] && [ "$(uname -m)" = arm64 ] || { echo "JARVIS needs an Apple Silicon Mac (M1 or newer)."; exit 1; }
@@ -40,7 +50,24 @@ echo "  downloading the voice model (one time, ~330 MB)…"
   && echo "  voice OK" || echo "  (voice test failed — JARVIS will fall back to the Mac's built-in voice)"
 
 say_step "Settings"
-[ -f .env ] || { cp .env.example .env; echo "  created .env — open it and put your first name in JARVIS_USER_NAME"; }
+[ -f .env ] || { cp .env.example .env; echo "  created .env"; }
+setvar() {   # setvar KEY VALUE: replace the KEY= line in .env (or add it)
+  .venv/bin/python - "$1" "$2" <<'PY'
+import sys, pathlib
+k, v = sys.argv[1], sys.argv[2].replace("\n", " ").strip()
+p = pathlib.Path(".env"); lines = p.read_text().splitlines()
+for i, l in enumerate(lines):
+    if l.startswith(k + "="):
+        lines[i] = f"{k}={v}"; break
+else:
+    lines.append(f"{k}={v}")
+p.write_text("\n".join(lines) + "\n")
+PY
+}
+[ -n "$NAME" ]  && setvar JARVIS_USER_NAME "$NAME"  && echo "  name: $NAME"
+[ -n "$TEAMS" ] && setvar JARVIS_TEAMS "$TEAMS"     && echo "  teams: $TEAMS"
+[ -n "$VOICE" ] && setvar JARVIS_KOKORO_VOICE "$VOICE" && echo "  voice: $VOICE"
+grep -q '^JARVIS_USER_NAME=.\+' .env || echo "  tip: put your first name after JARVIS_USER_NAME= in .env"
 
 say_step "The JARVIS app"
 [ "${JARVIS_NO_APP:-0}" = 1 ] || ./make_app.sh
@@ -48,9 +75,8 @@ say_step "The JARVIS app"
 cat <<'MSG'
 
 Done. Next:
-  1. Open .env and set JARVIS_USER_NAME (and teams, if you like).
-  2. Open JARVIS from ~/Applications (or Spotlight).
-  3. Allow the microphone when macOS asks.
-  4. Say "Hey JARVIS".
+  1. Open JARVIS from ~/Applications (or Spotlight).
+  2. Allow the microphone when macOS asks.
+  3. Say "Hey JARVIS".
 The first question also downloads the hearing model (~480 MB), so give it a minute.
 MSG
