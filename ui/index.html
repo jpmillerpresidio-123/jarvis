@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JARVIS — Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="scan"></div>
+<div class="grid-bg"></div>
+
+<!-- ══════════ HEADER ══════════ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="sigil"><span class="core"></span></div>
+    <div class="names">
+      <div class="eyebrow">Agent&nbsp;·&nbsp;Direct&nbsp;Channel</div>
+      <h1 class="wordmark">J A R V I S</h1>
+    </div>
+  </div>
+  <div class="pills">
+    <div class="pill"><span class="dot ok" id="p-gw-dot"></span><span id="p-gw">Gateway: connecting…</span></div>
+    <div class="pill"><span class="dot cy"></span><span id="p-profile">Profile: default</span></div>
+    <div class="pill"><span class="dot am"></span><span id="p-voice">Voice: —</span></div>
+  </div>
+</header>
+
+<!-- ══════════ BODY ══════════ -->
+<div class="hud">
+
+  <!-- ═══ LEFT ═══ -->
+  <section class="col left">
+    <div class="panel grow today">
+      <div class="rowhead"><div class="title">Today</div><div class="live" id="today-date">—</div></div>
+
+      <div class="lbl mt">Assignments</div>
+      <div class="tassign" id="t-assign"><div class="tmuted">Loading…</div></div>
+
+      <div class="lbl mt">Next on your calendar</div>
+      <div class="tevent" id="t-event"><div class="tmuted">Checking your calendar…</div></div>
+
+      <div class="lbl mt">Inbox</div>
+      <div class="tmail" id="t-mail"><div class="tmuted">Checking Gmail…</div></div>
+
+      <div class="lbl mt">Games</div>
+      <div class="tgames" id="t-games"><div class="tmuted">Loading schedules…</div></div>
+
+      <div class="lbl mt">Local time</div>
+      <div class="tclock">
+        <div class="ctime" id="c-time">--:--:--</div>
+        <div class="cdate" id="c-date">—</div>
+      </div>
+
+      <div class="tfoot" id="t-updated"></div>
+    </div>
+    <!-- old controls, kept hidden so typed /commands still work -->
+    <div hidden>
+    <div>
+      <div class="cmds" id="cmds">
+        <button class="cmd" data-cmd="/new"><b>/new</b><span>Fresh thread</span></button>
+        <button class="cmd" data-cmd="/goal"><b>/goal</b><span>Standing objective</span></button>
+        <button class="cmd" data-cmd="/profile"><b>/profile</b><span>Profile info</span></button>
+        <button class="cmd" data-cmd="/tools"><b>/tools</b><span>Tool status</span></button>
+        <button class="cmd" data-cmd="/background"><b>/background</b><span>Async mission</span></button>
+        <button class="cmd" data-cmd="/kanban"><b>/kanban</b><span>Work queue</span></button>
+        <button class="cmd" data-cmd="/personality"><b>/personality</b><span>Voice / tone overlay</span></button>
+        <button class="cmd" data-cmd="/commands"><b>/commands</b><span>Show commands</span></button>
+      </div>
+
+      <div class="sect">
+        <div class="lbl">Connected tools</div>
+        <div class="chips" id="chips"><span class="chip muted">waiting for first run…</span></div>
+      </div>
+
+      <div class="sect">
+        <div class="lbl">Pending uplink</div>
+        <div class="field">
+          <textarea id="input" rows="3" spellcheck="false"
+            placeholder="Speak, or type an instruction. Slash commands are supported."></textarea>
+        </div>
+        <div class="tip" id="tip">Just say <b>“Hey JARVIS”</b> — it shows up here live. Or type below.</div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ═══ CENTRE ═══ -->
+  <section class="col centre">
+    <div class="popclock" title="Live estimate — UN World Population Prospects 2024 (medium projection), ticking at the projected growth rate">
+      <div class="plbl">World population · live estimate</div>
+      <div class="pnum" id="pop">8,300,000,000</div>
+    </div>
+    <div class="reactor">
+      <svg viewBox="0 0 480 480" id="core">
+        <defs>
+          <radialGradient id="orb" cx="50%" cy="45%" r="55%">
+            <stop offset="0%"  stop-color="#dffbff"/>
+            <stop offset="35%" stop-color="#37e6ff"/>
+            <stop offset="75%" stop-color="#0a7d9c"/>
+            <stop offset="100%" stop-color="#02141d"/>
+          </radialGradient>
+          <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle class="ring rr1" cx="240" cy="240" r="222"/>
+        <circle class="ring rr2" cx="240" cy="240" r="186"/>
+        <circle class="ring rr3" cx="240" cy="240" r="150"/>
+        <circle class="ring rr4" cx="240" cy="240" r="112"/>
+        <circle class="arcA" cx="240" cy="240" r="202" filter="url(#soft)"/>
+        <circle class="arcB" cx="240" cy="240" r="170" filter="url(#soft)"/>
+        <g id="ticks480"></g>
+        <circle class="orb" cx="240" cy="240" r="56" fill="url(#orb)" filter="url(#soft)"/>
+        <circle class="orbrim" cx="240" cy="240" r="56"/>
+      </svg>
+      <div class="status">
+        <div class="stcore">J A R V I S &nbsp; C O R E</div>
+        <div class="stword" id="stword">STANDBY</div>
+        <div class="strun"  id="strun">awaiting uplink</div>
+      </div>
+    </div>
+
+    <div class="panel response">
+      <div class="rhead"><span class="lbl">JARVIS Response</span><span class="rtag" id="rtag">IDLE</span></div>
+      <div class="rbody" id="response"><span class="ph">Standing by. Transmit an instruction.</span></div>
+      <form class="ask" id="askForm" autocomplete="off">
+        <span class="ask-prompt">›</span>
+        <input id="ask" type="text" spellcheck="true" placeholder="Ask JARVIS anything…  (Return to send)">
+        <button type="submit" class="ask-send" title="Send">▸</button>
+      </form>
+    </div>
+
+    <div class="dock">
+      <button id="mic"   class="btn voice">◉ VOICE</button>
+      <button id="run"   class="btn primary">Transmit to JARVIS ▸</button>
+      <button id="standby" class="btn standby" title="Stop talking and listening, and go on standby">☾ Go on standby</button>
+      <button id="cmds2" class="btn">Show Commands</button>
+      <button id="mute"  class="btn icon on">🔊</button>
+      <button id="clear" class="btn">Clear</button>
+    </div>
+  </section>
+
+  <!-- ═══ RIGHT ═══ -->
+  <section class="col right">
+    <div class="panel grow">
+      <div class="rowhead">
+        <div class="title">Action Log</div>
+        <div class="live">Live telemetry</div>
+      </div>
+
+      <div class="sysgrid">
+        <div class="sysrow"><span>Gateway</span><b id="sy-gw" class="ok">—</b></div>
+        <div class="sysrow"><span>Brain</span><b id="sy-brain">—</b></div>
+        <div class="sysrow"><span>Voice</span><b id="sy-voice">—</b></div>
+        <div class="sysrow"><span>Profile</span><b id="sy-profile">default</b></div>
+        <div class="sysrow"><span>Session</span><b id="sy-session">none</b></div>
+        <div class="sysrow"><span>Uplink</span><b id="sy-clock">—</b></div>
+      </div>
+
+      <div class="lbl mt">Mission controls</div>
+      <div class="mctl">
+        <button class="mbtn" data-mc="status">Status</button>
+        <button class="mbtn" data-mc="tools">Tools</button>
+        <button class="mbtn" data-mc="queue">Queue</button>
+        <button class="mbtn" data-mc="wipe">Clear Log</button>
+      </div>
+
+      <div class="lbl mt">Event stream</div>
+      <div class="log" id="log"></div>
+    </div>
+  </section>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

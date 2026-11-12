@@ -1,0 +1,16 @@
+.env
+state.json
+.no-mcp.json
+__pycache__/
+*.pyc
+.env.local
+leads.json
+*.xlsx
+.venv/
+.remote-workdir/
+.sessions.json
+.kokoro/
+models/
+voice-samples/
+*.log
+.DS_Store

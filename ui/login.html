@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>JARVIS — Sign in</title>
+<style>
+  :root{--bg:#05121a;--panel:#0b1f2a;--line:#123444;--cyan:#37e6ff;--dim:#7fa7b5;--red:#ff6b6b;--text:#e8f7fb}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+    font:16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  body{display:flex;align-items:center;justify-content:center;padding:16px}
+  .card{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--line);
+    border-radius:18px;padding:32px 28px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+  .orb{width:54px;height:54px;border-radius:50%;margin:0 auto 18px;
+    background:radial-gradient(circle at 50% 45%,#dffbff,#37e6ff 35%,#0a7d9c 75%,#02141d);
+    box-shadow:0 0 28px rgba(55,230,255,.45)}
+  h1{margin:0;text-align:center;letter-spacing:.5em;font-size:18px;font-weight:600;color:var(--cyan)}
+  p{margin:8px 0 24px;text-align:center;color:var(--dim);font-size:14px}
+  input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);
+    background:#061620;color:var(--text);font-size:17px;outline:none}
+  input:focus{border-color:var(--cyan)}
+  button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:12px;background:var(--cyan);
+    color:#02141d;font-weight:700;font-size:16px;cursor:pointer}
+  button:disabled{opacity:.6;cursor:wait}
+  .err{min-height:20px;margin-top:12px;text-align:center;color:var(--red);font-size:14px}
+</style>
+</head>
+<body>
+<form class="card" id="f">
+  <div class="orb"></div>
+  <h1>JARVIS</h1>
+  <p>Private assistant. Enter your password.</p>
+  <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required autofocus>
+  <button id="go" type="submit">Sign in</button>
+  <div class="err" id="err"></div>
+</form>
+<script>
+document.getElementById('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const go = document.getElementById('go'), err = document.getElementById('err');
+  go.disabled = true; err.textContent = '';
+  try {
+    const r = await fetch('/api/login', {method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({password: document.getElementById('pw').value})});
+    const j = await r.json();
+    if (j.ok) { location.href = '/'; return; }
+    err.textContent = j.error || 'Sign-in failed.';
+  } catch (_) { err.textContent = "Can't reach JARVIS. Is your Mac on?"; }
+  go.disabled = false;
+});
+</script>
+</body>
+</html>

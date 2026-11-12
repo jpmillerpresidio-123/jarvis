@@ -1,0 +1,13 @@
+# JARVIS (server, listener, pop-up, app window) — installed into .venv by setup.sh
+numpy==2.0.2
+sounddevice==0.5.6
+openwakeword==0.6.0
+onnxruntime==1.19.2
+faster-whisper==1.2.1
+requests==2.32.5
+pyobjc-framework-Cocoa==11.1
+pyobjc-framework-Quartz==11.1
+pyobjc-framework-WebKit==11.1
+pyobjc-framework-AVFoundation==11.1
+pyobjc-framework-ApplicationServices==11.1
+uv
